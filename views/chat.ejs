@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room - <%= room %></title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    #messages {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+    }
+    .message {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .message:last-child {
+      border-bottom: none;
+    }
+    .input-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px 0 0 4px;
+      font-size: 16px;
+    }
+    .input-container .hh {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div style="margin-right: 10px; position: relative;">
+
+    <button style="background-color: #72c875; border-radius: 6px; padding: 6px; border-color: #9be086;" onclick="history.go(-1)">Go back</button>
+  </div>
+  <div class="container">
+    <h1>Chat Room - <%= room %></h1>
+    <div id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Enter a message">
+      <button class="hh" onclick="sendMessage()">Send Message</button>
+    </div>
+  </div>
+  <script>
+    const ws = new WebSocket(`ws://${location.host}`);
+    const room = '<%= room %>';
+    const identity = '<%= identity %>';
+    const messagesDiv = document.getElementById('messages');
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'join', payload: { room, identity } }));
+    };
+
+    ws.onmessage = (event) => {
+      const { type, payload, identity: senderIdentity } = JSON.parse(event.data);
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      if (type === 'system') {
+        messageDiv.textContent = payload;
+      } else if (type === 'message') {
+        messageDiv.innerHTML = `<strong>${senderIdentity}:</strong> ${payload}`;
+      }
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value;
+      ws.send(JSON.stringify({ type: 'message', payload: { room, message } }));
+      messageInput.value = '';
+    }
+  </script>
+</body>
+</html>

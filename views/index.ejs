@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Chat Rooms</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: calc(50% - 10px);
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #4CAF50;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select Chat Rooms</h1>
+    <input type="text" id="roomInput" placeholder="Enter room name">
+    <input type="text" id="identityInput" placeholder="Enter your identity">
+    <button id="joinButton" onclick="joinRoom()">Join Room</button>
+    <ul id="roomList"></ul>
+  </div>
+  <script>
+    const roomList = document.getElementById('roomList');
+    let joinedRooms = [];
+
+    function joinRoom() {
+      const room = document.getElementById('roomInput').value;
+      const identity = document.getElementById('identityInput').value;
+
+      if (room && identity && !joinedRooms.includes(room)) {
+        joinedRooms.push(room);
+        const listItem = document.createElement('li');
+        const roomLink = document.createElement('a');
+        roomLink.href = `/chat?room=${room}&identity=${identity}`;
+        roomLink.textContent = room;
+        listItem.appendChild(roomLink);
+        roomList.appendChild(listItem);
+      } else if (joinedRooms.includes(room)) {
+        alert(`You have already joined the room: ${room}`);
+      }
+    }
+  </script>
+</body>
+</html>
