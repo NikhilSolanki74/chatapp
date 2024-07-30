@@ -43,7 +43,7 @@ wss.on('connection', (ws) => {
 
       ws.send(JSON.stringify({
         type: 'system',
-        payload: `You have joined room: ${room}`
+        payload: `You have joined room: <strong style="color:#4367cb" > ${room} </strong>`
       }));
 
       // Send existing messages to the user who just joined
@@ -91,12 +91,12 @@ wss.on('connection', (ws) => {
         // Notify all clients in the room that messages have been cleared
         rooms[room].forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ type: 'clear' }));
             client.send(JSON.stringify({
               type: 'system',
-              payload: `The chat has been cleared by <strong style="color:#ff004e">${identity}</strong> `
+              payload: `The chat has been cleared by <strong style="color:#ff7a7a" >${identity}</strong> `
             }));
             // Optionally, you can send a special clear message to clear the UI
-            client.send(JSON.stringify({ type: 'clear' }));
           }
         });
       }

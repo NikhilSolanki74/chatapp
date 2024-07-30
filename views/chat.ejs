@@ -106,7 +106,7 @@
     </div>
   </div>
   <script>
-    const ws = new WebSocket(`wss://${location.host}`);
+    const ws = new WebSocket(`ws://${location.host}`);
     const room = '<%= room %>';
     const identity = '<%= identity %>';
     const messagesDiv = document.getElementById('messages');
@@ -123,7 +123,7 @@
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message';
         if (type === 'system') {
-          messageDiv.textContent = payload;
+          messageDiv.innerHTML = payload;
         } else if (type === 'message') {
           messageDiv.innerHTML = `<strong style="color:#886fbd" >${senderIdentity}:</strong> ${payload}`;
         }
@@ -150,7 +150,7 @@
     });
 
     function clearChat() {
-      ws.send(JSON.stringify({ type: 'clear', payload: { room } }));
+      ws.send(JSON.stringify({ type: 'clear', payload: {identity, room } }));
     }
   </script>
 </body>
