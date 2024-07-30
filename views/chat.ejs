@@ -78,7 +78,7 @@
     </div>
   </div>
   <script>
-    const ws = new WebSocket(`ws://${location.host}`);
+    const ws = new WebSocket(`wss://${location.host}`);
     const room = '<%= room %>';
     const identity = '<%= identity %>';
     const messagesDiv = document.getElementById('messages');
