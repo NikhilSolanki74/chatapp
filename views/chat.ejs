@@ -66,15 +66,15 @@
 </head>
 <body>
   <div style="margin-right: 10px; position: relative;">
-
     <button style="background-color: #72c875; border-radius: 6px; padding: 6px; border-color: #9be086;" onclick="history.go(-1)">Go back</button>
+    <button style="background-color: #f44336; border-radius: 6px; padding: 6px; border-color: #e57373;" onclick="clearChat()">Clear Chat</button>
   </div>
   <div class="container">
     <h1>Chat Room - <%= room %></h1>
     <div id="messages"></div>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="Enter a message">
-      <button class="hh" onclick="sendMessage()">Send Message</button>
+      <button class="hh" onkeydown="sendMessage()" onclick="sendMessage()">Send Message</button>
     </div>
   </div>
   <script>
@@ -102,9 +102,24 @@
 
     function sendMessage() {
       const messageInput = document.getElementById('messageInput');
-      const message = messageInput.value;
-      ws.send(JSON.stringify({ type: 'message', payload: { room, message } }));
-      messageInput.value = '';
+      const message = messageInput.value.trim();
+      if(message !== ''){
+        ws.send(JSON.stringify({ type: 'message', payload: { room, message } }));
+        messageInput.value = '';
+      }
+    }
+
+
+    document.getElementById('messageInput').addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    function clearChat(){
+      ws.send(JSON.stringify({ type: 'clear', payload: { identity,room } }));
+
     }
   </script>
 </body>
