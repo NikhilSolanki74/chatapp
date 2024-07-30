@@ -25,73 +25,6 @@ app.get('/chat', (req, res) => {
   res.render('chat', { room, identity });
 });
 
-// wss.on('connection', (ws) => {
-//   ws.on('message', (message) => {
-//     const parsedMessage = JSON.parse(message);
-
-//     if (parsedMessage.type === 'join') {
-//       const { room, identity } = parsedMessage.payload;
-
-//       if (!rooms[room]) {
-//         rooms[room] = [];
-//         messages[room] = [];
-//       }
-
-//       ws.room = room;
-//       ws.identity = identity;
-//       rooms[room].push(ws);
-
-//       ws.send(JSON.stringify({
-//         type: 'system',
-//         payload: `You have joined room: ${room}`
-//       }));
-
-//       // Send existing messages to the user who just joined
-//       messages[room].forEach(msg => {
-//         ws.send(JSON.stringify(msg));
-//       });
-
-//       // Broadcast to others in the room that a new user has joined
-//       rooms[room].forEach(client => {
-//         if (client !== ws && client.readyState === WebSocket.OPEN) {
-//           client.send(JSON.stringify({
-//             type: 'system',
-//             payload: `${identity} has joined the room`
-//           }));
-//         }
-//       });
-//     } else if (parsedMessage.type === 'message') {
-//       const { room, message: chatMessage } = parsedMessage.payload;
-
-//       if (rooms[room]) {
-//         const newMessage = {
-//           type: 'message',
-//           room: room,
-//           identity: ws.identity,
-//           payload: chatMessage
-//         };
-
-//         // Store message
-//         messages[room].push(newMessage);
-
-//         // Broadcast message to all clients in the room
-//         rooms[room].forEach(client => {
-//           if (client.readyState === WebSocket.OPEN) {
-//             client.send(JSON.stringify(newMessage));
-//           }
-//         });
-//       }
-//     }
-//   });
-
-//   ws.on('close', () => {
-//     const { room } = ws;
-//     if (rooms[room]) {
-//       rooms[room] = rooms[room].filter(client => client !== ws);
-//     }
-//   });
-// });
-
 wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     const parsedMessage = JSON.parse(message);
@@ -123,7 +56,7 @@ wss.on('connection', (ws) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({
             type: 'system',
-            payload: `${identity} has joined the room`
+            payload: `<strong style="color:#ef9d5a" >${identity}</strong> has joined the room`
           }));
         }
       });
@@ -160,7 +93,7 @@ wss.on('connection', (ws) => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({
               type: 'system',
-              payload: `The chat has been cleared by ${identity} `
+              payload: `The chat has been cleared by <strong style="color:#ff004e">${identity}</strong> `
             }));
             // Optionally, you can send a special clear message to clear the UI
             client.send(JSON.stringify({ type: 'clear' }));
