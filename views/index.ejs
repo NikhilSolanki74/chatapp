@@ -13,6 +13,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      font-size: 25px;
     }
     .container {
       background-color: #fff;
@@ -26,7 +27,8 @@
     }
     h1 {
       color: #4CAF50;
-      margin-bottom: 20px;
+      margin-bottom: 40px;
+      /* font-size: 30px; */
     }
     input[type="text"] {
       width: calc(90%);
@@ -34,7 +36,8 @@
       margin: 5px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 30px;
+      height: 40px;
     }
     button {
       background-color: #4CAF50;
@@ -42,9 +45,10 @@
       padding: 10px 20px;
       border: none;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 25px;
       cursor: pointer;
       margin-top: 10px;
+
     }
     button:hover {
       background-color: #45a049;
@@ -71,7 +75,7 @@
     a {
       text-decoration: none;
     color: #4CAF50;
-    font-size: 18px;
+    font-size: 35px;
     width: 100%;
     display: block;
     }
@@ -79,10 +83,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>Select Chat Rooms</h1>
+    <h1>Select Room</h1>
     <input type="text" id="roomInput" placeholder="Enter room name">
     <input type="text" id="identityInput" placeholder="Enter your identity">
-    <button id="joinButton" onclick="joinRoom()">Join Room</button>
+    <button id="joinButton" onclick="joinRoom()">Add Room</button>
     <ul id="roomList"></ul>
   </div>
   <script>
@@ -90,15 +94,15 @@
     let joinedRooms = [];
 
     function joinRoom() {
-      const room = document.getElementById('roomInput').value;
-      const identity = document.getElementById('identityInput').value;
+      const room = document.getElementById('roomInput').value.toLowerCase();
+      const identity = document.getElementById('identityInput').value.toLowerCase();
 
       if (room && identity && !joinedRooms.includes(room)) {
         joinedRooms.push(room);
         const listItem = document.createElement('li');
         const roomLink = document.createElement('a');
         roomLink.href = `/chat?room=${room}&identity=${identity}`;
-        roomLink.textContent = room;
+        roomLink.textContent = `#${room}`;
         listItem.appendChild(roomLink);
         roomList.appendChild(listItem);
       } else if (joinedRooms.includes(room)) {
